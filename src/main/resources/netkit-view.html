@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Netkit</title>
+
+        <style>
+            html, body {
+                width: 100%;
+                height: 100%;
+                padding: 0;
+                margin: 0;
+                overflow-x: hidden;
+                overflow-y: hidden;
+            }
+
+            object {
+                width: 100%;
+                height: 100%;
+                border: none;
+            }
+        </style>
+
+        <script>
+            var Netkit = {
+                loadURL: function (url) {
+                    Netkit.clear();
+
+                    var netkitView = document.createElement('object');
+                    netkitView.id = 'netkit-view';
+                    netkitView.data = url;
+                    netkitView.type = 'text/html';
+
+                    var view = document.getElementById('view');
+                    view.appendChild(netkitView);
+                },
+                loadContent: function (content) {
+                    Netkit.clear();
+
+                    var netkitView = document.createElement('object');
+                    netkitView.id = 'netkit-view';
+                    netkitView.innerHTML = content;
+
+                    var view = document.getElementById('view');
+                    view.appendChild(netkitView);
+
+                    var arr = netkitView.getElementsByTagName('script');
+                    for (var n = 0; n < arr.length; n++) {
+                        new Function(arr[n].innerHTML)();
+                    }
+                },
+                clear: function () {
+                    var body = document.getElementById('view');
+                    body.innerHTML = '';
+                },
+                getNetkitViewElement: function () {
+                    return document.getElementById('netkit-view');
+                }
+            };
+        </script>
+    </head>
+
+    <!-- Content -->
+    <body id="view"></body>
+
+</html>
