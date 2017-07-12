@@ -1,16 +1,20 @@
 package net.dzikoysk.netkit;
 
-import net.dzikoysk.netkit.util.WebViewUtils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
 import javafx.scene.Parent;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import net.dzikoysk.netkit.util.WebViewUtils;
 import netscape.javascript.JSObject;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.panda_lang.panda.utilities.commons.io.IOUtils;
 
 import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Netkit {
@@ -20,13 +24,15 @@ public class Netkit {
     private final NetkitConsole console;
     private final NetkitGateway gateway;
     private final JSObject window;
+    private final Map<UUID, NetkitPage> pages;
 
     protected Netkit() {
         this.view = new WebView();
         this.engine = view.getEngine();
         this.console = new NetkitConsole();
-        this.gateway = new NetkitGateway();
+        this.gateway = new NetkitGateway(this);
         this.window = executeScript("window");
+        this.pages = new HashMap<>();
     }
 
     protected void initialize(boolean sync) {
@@ -46,17 +52,25 @@ public class Netkit {
         String netkitView = IOUtils.convertStreamToString(Netkit.class.getResourceAsStream("/netkit-view.html"));
         engine.loadContent(netkitView);
 
-        if (sync) {
+        if (!done.get() && sync) {
             WebViewUtils.wait(view);
         }
     }
 
-    public void loadURL(String url) {
+    public NetkitPage loadURL(String url) {
+        NetkitPage page = new NetkitPage(this, UUID.randomUUID());
+        pages.put(page.getUUID(), page);
+
         engine.executeScript("Netkit.loadURL('" + url + "');");
+        return page;
     }
 
-    public void loadContent(String content) {
-        engine.executeScript("Netkit.loadContent('" + content + "');");
+    public NetkitPage loadContent(String content) {
+        NetkitPage page = new NetkitPage(this, UUID.randomUUID());
+        pages.put(page.getUUID(), page);
+
+        engine.executeScript("Netkit.loadContent('" + StringEscapeUtils.escapeHtml(content) + "');");
+        return page;
     }
 
     @SuppressWarnings({ "unchecked "})
@@ -79,6 +93,10 @@ public class Netkit {
 
     public Parent toParent() {
         return view;
+    }
+
+    protected Map<UUID, NetkitPage> getPages() {
+        return pages;
     }
 
     protected WebView getView() {
