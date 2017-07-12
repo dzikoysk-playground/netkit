@@ -1,11 +1,9 @@
-package com.archalaxy.netkit;
+package net.dzikoysk.netkit;
 
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import net.dzikoysk.netkit.Netkit;
-import net.dzikoysk.netkit.NetkitFactory;
 
 public class NetkitTest extends Application {
 
@@ -16,13 +14,12 @@ public class NetkitTest extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         NetkitFactory factory = new NetkitFactory();
-        Netkit netkit = factory.createNetkit();
-        netkit.loadContent("<p>xxx</p><script>console.log(\"contes\");</script>");
-        netkit.loadURL("http://onet.pl");
-        netkit.loadContent("<p>yyyy</p><script>console.log(\"tescon\");</script>");
+        Netkit netkit = factory.createSynchronizedNetkit();
+        netkit.loadURL("https://dzikoysk.net");
+        netkit.resize(900, 600);
 
         Group root = new Group(netkit.toParent());
-        Scene scene = new Scene(root, stage.getWidth(), stage.getHeight());
+        Scene scene = new Scene(root, root.getBoundsInParent().getWidth(), root.getBoundsInParent().getHeight());
 
         stage.setTitle("Tests :: Netkit");
         stage.setScene(scene);

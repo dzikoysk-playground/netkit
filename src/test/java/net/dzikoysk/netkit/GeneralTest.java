@@ -1,4 +1,4 @@
-package com.archalaxy.netkit;
+package net.dzikoysk.netkit;
 
 import javafx.application.Application;
 import javafx.scene.Group;
