@@ -15,8 +15,11 @@ public class NetkitTest extends Application {
     public void start(Stage stage) throws Exception {
         NetkitFactory factory = new NetkitFactory();
         Netkit netkit = factory.createSynchronizedNetkit();
-        netkit.loadURL("https://dzikoysk.net");
         netkit.resize(900, 600);
+
+        NetkitPage page = netkit.createPage();
+        page.addLoadListener(loadedPage -> System.out.println("lol"));
+        page.loadURL("file:///C:/Users/dzikoysk/Desktop/index.html");
 
         Group root = new Group(netkit.toParent());
         Scene scene = new Scene(root, root.getBoundsInParent().getWidth(), root.getBoundsInParent().getHeight());

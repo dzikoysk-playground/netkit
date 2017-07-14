@@ -11,6 +11,21 @@ public class NetkitConsole {
     private PrintStream output = System.out;
 
     @JavascriptMethod
+    public void warn(String message) {
+        output.println(message);
+    }
+
+    @JavascriptMethod
+    public void debug(String message) {
+        output.println(message);
+    }
+
+    @JavascriptMethod
+    public void info(String message) {
+        output.println(message);
+    }
+
+    @JavascriptMethod
     public void log(String message) {
         output.println(message);
     }

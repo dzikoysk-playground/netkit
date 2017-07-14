@@ -4,6 +4,6 @@ import net.dzikoysk.netkit.NetkitPage;
 
 public interface LoadListener {
 
-    void onLoad(NetkitPage page);
+    void onLoad(NetkitPage loadedPage);
 
 }

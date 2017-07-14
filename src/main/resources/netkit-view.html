@@ -23,23 +23,39 @@
 
         <script>
             var Netkit = {
-                loadURL: function (url) {
+                loadURL: function (id, url) {
                     Netkit.clear();
 
                     var netkitView = document.createElement('object');
                     netkitView.id = 'netkit-view';
                     netkitView.data = url;
                     netkitView.type = 'text/html';
+                    netkitView.addEventListener('load', function () {
+                        if (id === -1) {
+                            return;
+                        }
+
+                        //noinspection JSUnresolvedVariable,JSUnresolvedFunction
+                        NetkitGateway.callLoadListeners(id);
+                    });
 
                     var view = document.getElementById('view');
                     view.appendChild(netkitView);
                 },
-                loadContent: function (content) {
+                loadContent: function (id, content) {
                     Netkit.clear();
 
                     var netkitView = document.createElement('object');
                     netkitView.id = 'netkit-view';
                     netkitView.innerHTML = content;
+                    netkitView.addEventListener('load', function () {
+                        if (id === -1) {
+                            return;
+                        }
+
+                        //noinspection JSUnresolvedVariable,JSUnresolvedFunction
+                        NetkitGateway.callLoadListeners(id);
+                    });
 
                     var view = document.getElementById('view');
                     view.appendChild(netkitView);
@@ -57,6 +73,22 @@
                     return document.getElementById('netkit-view');
                 }
             };
+            
+            document.addEventListener('click', function (event) {
+                console.log('test');
+
+                event = event || window.event;
+                event = event.target || event.srcElement;
+
+                console.log(event);
+
+                if (event.nodeName === 'A') {
+                    console.log('loadURL');
+                    Netkit.loadURL(-1, event.href);
+                }
+            });
+
+            console.log('Netkit-View initialized');
         </script>
     </head>
 

@@ -2,6 +2,7 @@ package net.dzikoysk.netkit;
 
 import net.dzikoysk.netkit.js.JavascriptInterface;
 import net.dzikoysk.netkit.js.JavascriptMethod;
+import net.dzikoysk.netkit.listener.LoadListener;
 
 @JavascriptInterface
 public class NetkitGateway {
@@ -13,8 +14,20 @@ public class NetkitGateway {
     }
 
     @JavascriptMethod
-    public void callLoadListeners(String uuid) {
+    public void callLoadListeners(long id) {
+        NetkitPage page = netkit.getPages().get(id);
 
+        if (page == null) {
+            throw new RuntimeException("Page (id: " + id + ") doesn't exist");
+        }
+
+        for (LoadListener listener : page.getLoadListeners()) {
+            try {
+                listener.onLoad(page);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

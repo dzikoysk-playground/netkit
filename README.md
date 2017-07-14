@@ -1,5 +1,5 @@
 # Netkit [![Build Status](https://travis-ci.org/dzikoysk/Netkit.svg?branch=master)](https://travis-ci.org/dzikoysk/Netkit)
-Tiny wrapper for JavaFX WebView component which improves bugs and adds a more intuitive api
+[**Abandoned**] Tiny wrapper for JavaFX WebView component which improves bugs and adds a more intuitive api
 
 #### Getting Started
 ```java
